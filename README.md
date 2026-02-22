@@ -251,11 +251,11 @@ Public healthcare programs — TB, maternal care, diabetes, hypertension — suf
            ┌───────────┴───────────┐
            ▼                       ▼
 ┌──────────────────┐    ┌──────────────────────┐
-│  Anthropic /     │    │  Overpass API         │
-│  Gemini API      │    │  (OpenStreetMap)       │
-│                  │    │                        │
-│  Aadhaar scan    │    │  Nearby pharmacies     │
-│  AI Chatbot      │    │  Nearby hospitals      │
+│  Anthropic /     │    │  Overpass API        │
+│  Gemini API      │    │  (OpenStreetMap)     │
+│                  │    │                      │
+│  Aadhaar scan    │    │  Nearby pharmacies   │
+│  AI Chatbot      │    │  Nearby hospitals    │
 └──────────────────┘    └──────────────────────┘
 ```
 
@@ -265,10 +265,9 @@ Public healthcare programs — TB, maternal care, diabetes, hypertension — suf
 
 | Name | Role | Responsibility |
 |---|---|---|
-| [Team Member 1] | ML Engineer | Dropout prediction model, Flask API |
-| [Team Member 2] | Backend Developer | Express API, MongoDB, Auth |
-| [Team Member 3] | Frontend Developer | React UI, Charts, PDF generation |
-| [Team Member 4] | Integration & Pitch | DevOps, Deployment, Presentation |
+| [Kiran A V] | ML Engineer | Dropout prediction model, Flask API |
+| [Karthik M] | Backend Developer | Express API, MongoDB, Auth |
+| [Jeevan N Mallya] | Frontend Developer | React UI, Charts, PDF generation |
 
 **College:** Global Academy of Technology, Bengaluru
 **Event:** Hack-A-League 4.0 — February 21–22, 2026
@@ -351,7 +350,7 @@ cp .env.example .env
 
 Edit `backend/.env`:
 ```env
-PORT=5000
+PORT=8000
 MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/carenet
 ML_SERVICE_URL=http://localhost:5001
 FRONTEND_URL=http://localhost:5173
@@ -391,7 +390,7 @@ cp .env.example .env
 
 Edit `frontend/.env`:
 ```env
-VITE_API_URL=http://localhost:5000
+VITE_API_URL=http://localhost:8000
 VITE_ANTHROPIC_API_KEY=your_key_here
 VITE_GEMINI_API_KEY=your_key_here
 VITE_GROQ_API_KEY=your_key_here
@@ -415,7 +414,7 @@ python app.py
 ```bash
 cd carenet/backend
 npx nodemon server.js
-# ✅ CARE-NET Backend running on port 5000
+# ✅ CARE-NET Backend running on port 8000
 # ✅ MongoDB connected successfully
 ```
 
@@ -446,7 +445,7 @@ http://localhost:5173
 
 | Variable | Description | Required |
 |---|---|---|
-| `PORT` | Backend server port (default 5000) | ✅ |
+| `PORT` | Backend server port (default 8000) | ✅ |
 | `MONGODB_URI` | MongoDB Atlas connection string | ✅ |
 | `ML_SERVICE_URL` | Flask ML service URL | ✅ |
 | `FRONTEND_URL` | React app URL for CORS | ✅ |
