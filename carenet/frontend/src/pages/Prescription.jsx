@@ -4,7 +4,7 @@ import { ArrowLeft, Plus, X, FileText, Download, Trash2 } from "lucide-react";
 import { getPatient } from "../api/axios";
 import { generatePrescriptionPDF } from "../utils/generatePDF";
 
-const emptyMed = { name: "", dosage: "", frequency: "", duration: "", instructions: "" };
+const emptyMed = { name: "", dosage: "", frequency: "", duration: "", time: "" };
 
 export default function Prescription() {
     const { patientId } = useParams();
@@ -222,52 +222,94 @@ export default function Prescription() {
                             </button>
                         </div>
                         {form.medications.map((med, i) => (
-                            <div key={i} className="flex items-start gap-2">
-                                <div className="flex-1 grid grid-cols-5 gap-2">
-                                    <input
-                                        type="text"
-                                        value={med.name}
-                                        onChange={(e) => updateMed(i, "name", e.target.value)}
-                                        className={`${inputCls} col-span-2`}
-                                        placeholder="Medicine Name"
-                                    />
-                                    <input
-                                        type="text"
-                                        value={med.dosage}
-                                        onChange={(e) => updateMed(i, "dosage", e.target.value)}
-                                        className={inputCls}
-                                        placeholder="500mg"
-                                    />
-                                    <input
-                                        type="text"
-                                        value={med.frequency}
-                                        onChange={(e) => updateMed(i, "frequency", e.target.value)}
-                                        className={inputCls}
-                                        placeholder="Twice daily"
-                                    />
-                                    <input
-                                        type="text"
-                                        value={med.duration}
-                                        onChange={(e) => updateMed(i, "duration", e.target.value)}
-                                        className={inputCls}
-                                        placeholder="7 days"
-                                    />
+                            <div key={i} className="border border-slate-700/40 rounded-xl p-3 space-y-2 relative group">
+                                {/* Row 1: Medicine Name & Dosage */}
+                                <div className="flex items-start gap-2">
+                                    <div className="flex-1 grid grid-cols-2 gap-2">
+                                        <div>
+                                            <label className="block text-slate-500 text-[10px] font-medium mb-1 uppercase tracking-wider">Medicine Name *</label>
+                                            <input
+                                                type="text"
+                                                value={med.name}
+                                                onChange={(e) => updateMed(i, "name", e.target.value)}
+                                                className={inputCls}
+                                                placeholder="e.g. Paracetamol"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block text-slate-500 text-[10px] font-medium mb-1 uppercase tracking-wider">Dosage</label>
+                                            <input
+                                                type="text"
+                                                value={med.dosage}
+                                                onChange={(e) => updateMed(i, "dosage", e.target.value)}
+                                                className={inputCls}
+                                                placeholder="e.g. 500mg / 10ml"
+                                            />
+                                        </div>
+                                    </div>
+                                    <button
+                                        type="button"
+                                        onClick={() => removeMed(i)}
+                                        disabled={form.medications.length <= 1}
+                                        className="mt-5 text-red-400 hover:text-red-300 disabled:opacity-20 transition-colors"
+                                    >
+                                        <X className="w-4 h-4" />
+                                    </button>
                                 </div>
-                                <input
-                                    type="text"
-                                    value={med.instructions}
-                                    onChange={(e) => updateMed(i, "instructions", e.target.value)}
-                                    className={`${inputCls} w-32`}
-                                    placeholder="After food"
-                                />
-                                <button
-                                    type="button"
-                                    onClick={() => removeMed(i)}
-                                    disabled={form.medications.length <= 1}
-                                    className="mt-2 text-red-400 hover:text-red-300 disabled:opacity-20 transition-colors"
-                                >
-                                    <X className="w-4 h-4" />
-                                </button>
+                                {/* Row 2: Frequency, Duration & Time */}
+                                <div className="grid grid-cols-3 gap-2">
+                                    <div>
+                                        <label className="block text-slate-500 text-[10px] font-medium mb-1 uppercase tracking-wider">Frequency</label>
+                                        <select
+                                            value={med.frequency}
+                                            onChange={(e) => updateMed(i, "frequency", e.target.value)}
+                                            className={inputCls}
+                                        >
+                                            <option value="">Select frequency</option>
+                                            <option value="Once daily">Once daily</option>
+                                            <option value="Twice daily">Twice daily</option>
+                                            <option value="Thrice daily">Thrice daily</option>
+                                            <option value="Every 6 hours">Every 6 hours</option>
+                                            <option value="Every 8 hours">Every 8 hours</option>
+                                            <option value="Every 12 hours">Every 12 hours</option>
+                                            <option value="As needed">As needed (SOS)</option>
+                                            <option value="Weekly">Weekly</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label className="block text-slate-500 text-[10px] font-medium mb-1 uppercase tracking-wider">Duration</label>
+                                        <input
+                                            type="text"
+                                            value={med.duration}
+                                            onChange={(e) => updateMed(i, "duration", e.target.value)}
+                                            className={inputCls}
+                                            placeholder="e.g. 7 days"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-slate-500 text-[10px] font-medium mb-1 uppercase tracking-wider">⏰ Time to Take</label>
+                                        <select
+                                            value={med.time}
+                                            onChange={(e) => updateMed(i, "time", e.target.value)}
+                                            className={inputCls}
+                                        >
+                                            <option value="">Select timing</option>
+                                            <option value="Before food">Before food</option>
+                                            <option value="After food">After food</option>
+                                            <option value="With food">With food</option>
+                                            <option value="Empty stomach">Empty stomach</option>
+                                            <option value="Before breakfast">Before breakfast</option>
+                                            <option value="After breakfast">After breakfast</option>
+                                            <option value="Before lunch">Before lunch</option>
+                                            <option value="After lunch">After lunch</option>
+                                            <option value="Before dinner">Before dinner</option>
+                                            <option value="After dinner">After dinner</option>
+                                            <option value="Bedtime">At bedtime</option>
+                                            <option value="Morning">Morning</option>
+                                            <option value="Evening">Evening</option>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
                         ))}
                     </div>
@@ -417,6 +459,7 @@ export default function Prescription() {
                                                 <th className="text-left py-1 font-medium">Dosage</th>
                                                 <th className="text-left py-1 font-medium">Frequency</th>
                                                 <th className="text-left py-1 font-medium">Duration</th>
+                                                <th className="text-left py-1 font-medium">Time</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -429,6 +472,7 @@ export default function Prescription() {
                                                         <td className="py-1 text-gray-500">{m.dosage || "—"}</td>
                                                         <td className="py-1 text-gray-500">{m.frequency || "—"}</td>
                                                         <td className="py-1 text-gray-500">{m.duration || "—"}</td>
+                                                        <td className="py-1 text-gray-500">{m.time || "—"}</td>
                                                     </tr>
                                                 ))}
                                         </tbody>

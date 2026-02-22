@@ -1,7 +1,13 @@
 const express = require("express");
+const mongoose = require("mongoose");
 const router = express.Router();
 const Patient = require("../models/Patient");
 const { runAssessmentAndSave } = require("../utils/assessRisk");
+
+function idFilter(id) {
+  if (mongoose.Types.ObjectId.isValid(id)) return { _id: id };
+  return { patientId: id };
+}
 
 const SCHEMES = {
   "Ayushman Bharat PM-JAY": {
@@ -52,7 +58,7 @@ const SCHEMES = {
 router.get("/api/schemes/recommend/:patientId", async (req, res) => {
   try {
     const patient = await Patient.findOne({
-      _id: req.params.patientId,
+      ...idFilter(req.params.patientId),
       isActive: { $ne: false },
     });
     if (!patient) return res.status(404).json({ error: "Patient not found" });
@@ -90,7 +96,7 @@ router.get("/api/schemes/recommend/:patientId", async (req, res) => {
 router.post("/api/schemes/enroll/:patientId", async (req, res) => {
   try {
     const patient = await Patient.findOne({
-      _id: req.params.patientId,
+      ...idFilter(req.params.patientId),
       isActive: { $ne: false },
     });
     if (!patient) return res.status(404).json({ error: "Patient not found" });

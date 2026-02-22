@@ -323,12 +323,12 @@ export function generatePrescriptionPDF(patient, prescription) {
       m.dosage || "—",
       m.frequency || "—",
       m.duration || "—",
-      m.instructions || "—",
+      m.time || "—",
     ]);
 
     autoTable(doc, {
       startY: y,
-      head: [["#", "Medicine Name", "Dosage", "Frequency", "Duration", "Instructions"]],
+      head: [["#", "Medicine Name", "Dosage", "Frequency", "Duration", "Time"]],
       body: medRows,
       margin: { left: margin, right: margin },
       headStyles: { fillColor: [6, 78, 97], textColor: [255, 255, 255], fontSize: 8 },

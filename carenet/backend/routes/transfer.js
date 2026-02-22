@@ -1,14 +1,20 @@
 const express = require("express");
+const mongoose = require("mongoose");
 const router = express.Router();
 const Patient = require("../models/Patient");
 const { runAssessmentAndSave } = require("../utils/assessRisk");
 const { createLog } = require("../middleware/logger");
 
+function idFilter(id) {
+  if (mongoose.Types.ObjectId.isValid(id)) return { _id: id };
+  return { patientId: id };
+}
+
 
 router.post("/api/transfer/:patientId", async (req, res) => {
   try {
     const patient = await Patient.findOne({
-      _id: req.params.patientId,
+      ...idFilter(req.params.patientId),
       isActive: { $ne: false },
     });
     if (!patient) return res.status(404).json({ error: "Patient not found" });
@@ -64,7 +70,7 @@ router.post("/api/transfer/:patientId", async (req, res) => {
 router.get("/api/transfer/:patientId/history", async (req, res) => {
   try {
     const patient = await Patient.findOne({
-      _id: req.params.patientId,
+      ...idFilter(req.params.patientId),
       isActive: { $ne: false },
     });
     if (!patient) return res.status(404).json({ error: "Patient not found" });

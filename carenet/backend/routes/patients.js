@@ -1,8 +1,17 @@
 const express = require("express");
+const mongoose = require("mongoose");
 const router = express.Router();
 const Patient = require("../models/Patient");
 const { runAssessmentAndSave } = require("../utils/assessRisk");
 const { createLog } = require("../middleware/logger");
+
+// Helper: build a query filter that works with both MongoDB _id and custom patientId
+function idFilter(id) {
+  if (mongoose.Types.ObjectId.isValid(id)) {
+    return { _id: id };
+  }
+  return { patientId: id };
+}
 
 router.get("/api/patients", async (req, res) => {
   try {
@@ -88,7 +97,7 @@ router.post("/api/patients", async (req, res) => {
 router.get("/api/patients/:id", async (req, res) => {
   try {
     const patient = await Patient.findOne({
-      _id: req.params.id,
+      ...idFilter(req.params.id),
       isActive: { $ne: false },
     });
     if (!patient) return res.status(404).json({ error: "Patient not found" });
@@ -101,7 +110,7 @@ router.get("/api/patients/:id", async (req, res) => {
 router.put("/api/patients/:id", async (req, res) => {
   try {
     const patient = await Patient.findOne({
-      _id: req.params.id,
+      ...idFilter(req.params.id),
       isActive: { $ne: false },
     });
     if (!patient) return res.status(404).json({ error: "Patient not found" });
@@ -137,7 +146,7 @@ router.put("/api/patients/:id", async (req, res) => {
 
 router.delete("/api/patients/:id", async (req, res) => {
   try {
-    const patient = await Patient.findById(req.params.id);
+    const patient = await Patient.findOne(idFilter(req.params.id));
     if (!patient) return res.status(404).json({ error: "Patient not found" });
     patient.isActive = false;
     await patient.save();
@@ -150,7 +159,7 @@ router.delete("/api/patients/:id", async (req, res) => {
 router.post("/api/patients/:id/assess", async (req, res) => {
   try {
     const patient = await Patient.findOne({
-      _id: req.params.id,
+      ...idFilter(req.params.id),
       isActive: { $ne: false },
     });
     if (!patient) return res.status(404).json({ error: "Patient not found" });
@@ -174,7 +183,7 @@ router.post("/api/patients/:id/assess", async (req, res) => {
 router.post("/api/patients/:id/appointment", async (req, res) => {
   try {
     const patient = await Patient.findOne({
-      _id: req.params.id,
+      ...idFilter(req.params.id),
       isActive: { $ne: false },
     });
     if (!patient) return res.status(404).json({ error: "Patient not found" });
