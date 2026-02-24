@@ -196,7 +196,7 @@ Public healthcare programs — TB, maternal care, diabetes, hypertension — suf
 | Technology | Purpose |
 |---|---|
 | Node.js + Express | REST API server |
-| MongoDB + Mongoose | Database and ODM |
+| MongoDB + ose | Database and ODM |
 | JWT + bcryptjs | Authentication |
 | Axios | Internal service calls to ML |
 | Morgan + Winston | Request logging |
