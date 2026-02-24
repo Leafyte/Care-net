@@ -3,7 +3,7 @@
 
 <div align="center">
 
-<img width="600" height="200" alt="carenetbanner" src="https://github.com/user-attachments/assets/51893883-9e42-4b81-be74-a3e6be3d7318" />
+<img width="600" height="200" alt="carenetbanner" src="https://github.com/user-attachments/assets/4a9e8f5b-3f0a-43c3-b391-fc7f25d5471c" />
 
 > *"In India, nearly 50% of chronic disease patients drop out of treatment midway — not because they want to, but because the system fails them. CARE-NET fixes that."*
 
